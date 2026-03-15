@@ -105,11 +105,10 @@ export default function Home() {
 
           {checkResult && (
             <div
-              className={`mt-4 p-4 rounded-xl animate-fade-in-up border ${
-                checkResult.eligible 
-                  ? "bg-green-500/10 border-green-500/20" 
+              className={`mt-4 p-4 rounded-xl animate-fade-in-up border ${checkResult.eligible
+                  ? "bg-green-500/10 border-green-500/20"
                   : "bg-red-500/10 border-red-500/20"
-              }`}
+                }`}
             >
               <div className="flex items-center gap-3 mb-2">
                 <span className="text-xl">{checkResult.eligible ? "✅" : "❌"}</span>
@@ -135,8 +134,8 @@ export default function Home() {
             { name: "고혈압/당뇨", color: "from-teal-600/20" },
             { name: "만성 비염", color: "from-rose-600/20" },
           ].map((cat, i) => (
-            <div 
-              key={i} 
+            <div
+              key={i}
               className={`glass-card p-5 h-28 bg-gradient-to-br ${cat.color} to-transparent flex flex-col justify-end transition-transform active:scale-95`}
             >
               <p className="text-sm font-bold">{cat.name}</p>
