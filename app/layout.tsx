@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import MobileNav from "@/components/MobileNav";
 
@@ -12,6 +12,13 @@ export const metadata: Metadata = {
     description: "탈모약, 피부과 연고, 만성질환약 안심 배송",
     type: "website",
   },
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
 };
 
 export default function RootLayout({

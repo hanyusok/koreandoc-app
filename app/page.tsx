@@ -20,9 +20,7 @@ export default function Home() {
     if (!drugQuery.trim()) return;
     setChecking(true);
     try {
-      const res = await fetch(
-        `/api/check-drug?name=${encodeURIComponent(drugQuery)}`
-      );
+      const res = await fetch(`/api/check-drug?name=${encodeURIComponent(drugQuery)}`);
       const data = await res.json();
       setCheckResult(data);
     } finally {
@@ -31,116 +29,176 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen px-6 pt-12 pb-24">
-      {/* Header Profile */}
-      <header className="flex justify-between items-center mb-8">
+    <div style={{ padding: "56px 20px 96px", minHeight: "100vh" }}>
+
+      {/* ── Header ── */}
+      <header style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "24px" }}>
         <div>
-          <h1 className="text-2xl font-bold tracking-tight">안녕하세요 👋</h1>
-          <p className="text-gray-400 text-sm">미국 거주 한인 한국 약 안심 배송</p>
+          <h1 style={{ fontSize: "22px", fontWeight: 700, letterSpacing: "-0.3px", lineHeight: 1.3 }}>
+            안녕하세요 👋
+          </h1>
+          <p style={{ fontSize: "13px", color: "var(--text-secondary)", marginTop: "3px" }}>
+            미국 거주 한인 한국 약 안심 배송
+          </p>
         </div>
-        <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-blue-600 to-purple-600 flex items-center justify-center text-white shadow-lg shadow-blue-900/40">
-          <Heart size={24} fill="white" />
+        <div style={{
+          width: "44px", height: "44px", borderRadius: "14px",
+          background: "linear-gradient(135deg, #4f8ef7, #8b5cf6)",
+          display: "flex", alignItems: "center", justifyContent: "center",
+          boxShadow: "0 4px 14px rgba(79,142,247,0.35)",
+          flexShrink: 0,
+        }}>
+          <Heart size={20} fill="white" color="white" />
         </div>
       </header>
 
-      {/* Main Hero Card */}
-      <div className="glass-card p-6 border-blue-500/20 bg-gradient-to-br from-blue-600/10 to-transparent relative overflow-hidden mb-8">
-        <Sparkles className="absolute top-4 right-4 text-blue-400/30" size={40} />
-        <h2 className="text-lg font-bold mb-2">오늘도 건강한 하루 보내세요</h2>
-        <p className="text-xs text-gray-400 leading-relaxed max-w-[200px] mb-6">
-          처방전 접수부터 통관 서류 준비까지 KoreanDoc이 완벽하게 대행해 드립니다.
+      {/* ── Hero Card ── */}
+      <div style={{
+        background: "rgba(22,22,38,0.8)",
+        border: "1px solid rgba(79,142,247,0.2)",
+        borderRadius: "20px",
+        padding: "22px 20px",
+        marginBottom: "16px",
+        position: "relative",
+        overflow: "hidden",
+        boxShadow: "0 4px 24px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.05)",
+      }}>
+        <div style={{
+          position: "absolute", top: "-24px", right: "-24px",
+          width: "120px", height: "120px", borderRadius: "50%",
+          background: "radial-gradient(circle, rgba(79,142,247,0.3), transparent 70%)",
+          pointerEvents: "none",
+        }} />
+        <Sparkles size={28} style={{ position: "absolute", top: "16px", right: "16px", color: "#4f8ef7", opacity: 0.2 }} />
+
+        <p style={{ fontSize: "11px", fontWeight: 700, letterSpacing: "0.1em", color: "var(--accent-blue)", marginBottom: "8px", textTransform: "uppercase" }}>
+          KoreanDoc
         </p>
-        <Link href="/order" className="btn-primary py-3 px-6 text-sm">
-          신청하기 <ArrowRight size={14} className="ml-2" />
+        <h2 style={{ fontSize: "18px", fontWeight: 700, lineHeight: 1.35, marginBottom: "8px" }}>
+          오늘도 건강한 하루 보내세요
+        </h2>
+        <p style={{ fontSize: "13px", color: "var(--text-secondary)", lineHeight: 1.65, marginBottom: "20px" }}>
+          처방전 접수부터 통관 서류 준비까지<br />완벽하게 대행해 드립니다.
+        </p>
+        <Link href="/order" style={{
+          display: "inline-flex", alignItems: "center", gap: "6px",
+          background: "linear-gradient(135deg, #4f8ef7, #8b5cf6)",
+          color: "white", textDecoration: "none",
+          borderRadius: "10px", padding: "11px 22px",
+          fontSize: "14px", fontWeight: 700,
+          boxShadow: "0 4px 14px rgba(79,142,247,0.3)",
+        }}>
+          신청하기 <ArrowRight size={14} />
         </Link>
       </div>
 
-      {/* Quick Stats/Features */}
-      <div className="grid grid-cols-2 gap-4 mb-10">
-        <div className="glass-card p-4 flex flex-col items-center text-center">
-          <div className="w-10 h-10 rounded-full bg-green-950 flex items-center justify-center text-green-400 mb-2">
-            <ShieldCheck size={20} />
+      {/* ── Stats Row ── */}
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px", marginBottom: "32px" }}>
+        {[
+          { icon: <ShieldCheck size={18} />, bg: "rgba(34,197,94,0.1)", color: "#22c55e", border: "rgba(34,197,94,0.18)", label: "통관 통과율", value: "95.4%" },
+          { icon: <Truck size={18} />, bg: "rgba(79,142,247,0.1)", color: "#4f8ef7", border: "rgba(79,142,247,0.18)", label: "평균 배송일", value: "8.2일" },
+        ].map((s, i) => (
+          <div key={i} style={{
+            background: "rgba(22,22,36,0.7)", border: `1px solid ${s.border}`,
+            borderRadius: "14px", padding: "14px 14px",
+            display: "flex", alignItems: "center", gap: "12px",
+          }}>
+            <div style={{
+              width: "36px", height: "36px", borderRadius: "10px",
+              background: s.bg, color: s.color,
+              display: "flex", alignItems: "center", justifyContent: "center",
+              flexShrink: 0,
+            }}>
+              {s.icon}
+            </div>
+            <div>
+              <p style={{ fontSize: "10px", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.06em", color: "var(--text-secondary)" }}>
+                {s.label}
+              </p>
+              <p style={{ fontSize: "18px", fontWeight: 700, lineHeight: 1.2 }}>{s.value}</p>
+            </div>
           </div>
-          <p className="text-[10px] text-gray-500 uppercase font-bold">통관 통과율</p>
-          <p className="text-lg font-bold">95.4%</p>
-        </div>
-        <div className="glass-card p-4 flex flex-col items-center text-center">
-          <div className="w-10 h-10 rounded-full bg-blue-950 flex items-center justify-center text-blue-400 mb-2">
-            <Truck size={20} />
-          </div>
-          <p className="text-[10px] text-gray-500 uppercase font-bold">평균 배송일</p>
-          <p className="text-lg font-bold">8.2일</p>
-        </div>
+        ))}
       </div>
 
-      {/* Drug Checker Widget */}
-      <section className="mb-10">
-        <h3 className="text-sm font-bold text-gray-400 mb-6 uppercase tracking-widest flex items-center gap-2">
-          <Activity size={14} /> Drug Checker
-        </h3>
-        <div className="glass-card p-5">
-          <p className="text-xs text-gray-400 mb-4">내 약이 미국으로 배송 가능한 성분인지 확인하세요.</p>
-          <form onSubmit={handleDrugCheck} className="flex gap-2">
-            <div className="relative flex-1">
+      {/* ── Drug Checker ── */}
+      <section style={{ marginBottom: "32px" }}>
+        <p style={{ fontSize: "11px", fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--text-secondary)", display: "flex", alignItems: "center", gap: "6px", marginBottom: "12px" }}>
+          <Activity size={12} /> Drug Checker
+        </p>
+        <div style={{
+          background: "rgba(22,22,36,0.7)", border: "1px solid var(--border)",
+          borderRadius: "16px", padding: "18px 16px",
+        }}>
+          <p style={{ fontSize: "13px", color: "var(--text-secondary)", marginBottom: "14px" }}>
+            내 약이 미국으로 배송 가능한 성분인지 확인하세요.
+          </p>
+          <form onSubmit={handleDrugCheck} style={{ display: "flex", gap: "10px" }}>
+            <div style={{ position: "relative", flex: 1 }}>
               <input
-                className="form-input py-3 pl-10"
+                className="form-input"
+                style={{ paddingLeft: "38px", paddingTop: "12px", paddingBottom: "12px", fontSize: "14px" }}
                 type="text"
                 placeholder="약 이름 입력..."
                 value={drugQuery}
-                onChange={(e) => {
-                  setDrugQuery(e.target.value);
-                  setCheckResult(null);
-                }}
+                onChange={(e) => { setDrugQuery(e.target.value); setCheckResult(null); }}
               />
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-600" size={16} />
+              <Search size={15} style={{ position: "absolute", left: "12px", top: "50%", transform: "translateY(-50%)", color: "var(--text-secondary)" }} />
             </div>
-            <button
-              type="submit"
-              className="btn-primary py-3 px-5 transition-all"
-              disabled={checking}
-            >
-              <ArrowRight size={18} />
+            <button type="submit" disabled={checking} style={{
+              display: "flex", alignItems: "center", justifyContent: "center",
+              background: "linear-gradient(135deg, #4f8ef7, #8b5cf6)",
+              border: "none", borderRadius: "10px", padding: "12px 16px",
+              cursor: "pointer", flexShrink: 0,
+              boxShadow: "0 4px 12px rgba(79,142,247,0.3)",
+            }}>
+              <ArrowRight size={16} color="white" />
             </button>
           </form>
 
           {checkResult && (
-            <div
-              className={`mt-4 p-4 rounded-xl animate-fade-in-up border ${checkResult.eligible
-                  ? "bg-green-500/10 border-green-500/20"
-                  : "bg-red-500/10 border-red-500/20"
-                }`}
-            >
-              <div className="flex items-center gap-3 mb-2">
-                <span className="text-xl">{checkResult.eligible ? "✅" : "❌"}</span>
-                <p className="font-bold text-sm">
+            <div className="animate-fade-in-up" style={{
+              marginTop: "14px", padding: "14px", borderRadius: "12px",
+              background: checkResult.eligible ? "rgba(34,197,94,0.08)" : "rgba(244,63,94,0.08)",
+              border: `1px solid ${checkResult.eligible ? "rgba(34,197,94,0.2)" : "rgba(244,63,94,0.2)"}`,
+            }}>
+              <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "6px" }}>
+                <span style={{ fontSize: "18px" }}>{checkResult.eligible ? "✅" : "❌"}</span>
+                <p style={{ fontSize: "13px", fontWeight: 700 }}>
                   {checkResult.eligible ? "배송 가능 품목" : "배송 제한 품목"}
                 </p>
               </div>
-              <p className="text-[11px] text-gray-400 leading-relaxed">{checkResult.note}</p>
+              <p style={{ fontSize: "12px", color: "var(--text-secondary)", lineHeight: 1.6 }}>{checkResult.note}</p>
             </div>
           )}
         </div>
       </section>
 
-      {/* Popular Drugs Grid */}
+      {/* ── Top Categories ── */}
       <section>
-        <h3 className="text-sm font-bold text-gray-400 mb-6 uppercase tracking-widest flex items-center gap-2">
-          <Pill size={14} /> Top Categories
-        </h3>
-        <div className="grid grid-cols-2 gap-4">
+        <p style={{ fontSize: "11px", fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--text-secondary)", display: "flex", alignItems: "center", gap: "6px", marginBottom: "12px" }}>
+          <Pill size={12} /> Top Categories
+        </p>
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px" }}>
           {[
-            { name: "탈모약 전문", color: "from-blue-600/20" },
-            { name: "피부과 연고", color: "from-purple-600/20" },
-            { name: "고혈압/당뇨", color: "from-teal-600/20" },
-            { name: "만성 비염", color: "from-rose-600/20" },
+            { name: "탈모약 전문", sub: "Finasteride 등", accent: "#4f8ef7", bg: "rgba(79,142,247,0.1)", border: "rgba(79,142,247,0.18)" },
+            { name: "피부과 연고", sub: "Retin-A, 스티바A", accent: "#8b5cf6", bg: "rgba(139,92,246,0.1)", border: "rgba(139,92,246,0.18)" },
+            { name: "고혈압/당뇨", sub: "만성질환약", accent: "#14b8a6", bg: "rgba(20,184,166,0.1)", border: "rgba(20,184,166,0.18)" },
+            { name: "만성 비염", sub: "코세척, 스프레이", accent: "#f43f5e", bg: "rgba(244,63,94,0.1)", border: "rgba(244,63,94,0.18)" },
           ].map((cat, i) => (
-            <div
-              key={i}
-              className={`glass-card p-5 h-28 bg-gradient-to-br ${cat.color} to-transparent flex flex-col justify-end transition-transform active:scale-95`}
-            >
-              <p className="text-sm font-bold">{cat.name}</p>
-              <div className="mt-2 text-[10px] text-gray-500 font-bold flex items-center uppercase tracking-wider">
-                Explore <ArrowRight size={10} className="ml-1" />
+            <div key={i} style={{
+              background: cat.bg, border: `1px solid ${cat.border}`,
+              borderRadius: "16px", padding: "16px",
+              display: "flex", flexDirection: "column", justifyContent: "space-between",
+              height: "108px",
+            }}>
+              <div style={{ width: "24px", height: "3px", borderRadius: "2px", background: cat.accent }} />
+              <div>
+                <p style={{ fontSize: "13px", fontWeight: 700, marginBottom: "2px" }}>{cat.name}</p>
+                <p style={{ fontSize: "11px", color: "var(--text-secondary)", marginBottom: "6px" }}>{cat.sub}</p>
+                <p style={{ fontSize: "10px", fontWeight: 700, color: cat.accent, textTransform: "uppercase", letterSpacing: "0.06em", display: "flex", alignItems: "center" }}>
+                  Explore <ArrowRight size={9} style={{ marginLeft: "3px" }} />
+                </p>
               </div>
             </div>
           ))}

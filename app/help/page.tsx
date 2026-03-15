@@ -22,59 +22,101 @@ const FAQ_ITEMS = [
   },
 ];
 
+const GUIDE_LINKS = [
+  { icon: ShieldCheck, title: "FDA 90일 규정 안내", sub: "Read Guide", color: "#22c55e", bg: "rgba(34,197,94,0.1)" },
+  { icon: FileText, title: "필수 동봉 서류 확인", sub: "View Documents", color: "#4f8ef7", bg: "rgba(79,142,247,0.1)" },
+  { icon: Mail, title: "이메일 문의", sub: "support@koreandoc.com", color: "#8b5cf6", bg: "rgba(139,92,246,0.1)" },
+];
+
 export default function HelpPage() {
   const [openFaq, setOpenFaq] = useState<number | null>(null);
 
   return (
-    <div className="p-6 max-w-md mx-auto min-h-screen pb-24">
-      <header className="mb-8">
-        <h1 className="text-2xl font-bold mb-2">안내 및 고객지원</h1>
-        <p className="text-gray-400 text-sm">궁금하신 내용을 확인하거나 상담사에게 문의하세요.</p>
+    <div style={{ minHeight: "100vh", padding: "56px 20px 96px" }}>
+
+      {/* ── Header ── */}
+      <header style={{ marginBottom: "28px" }}>
+        <h1 style={{ fontSize: "22px", fontWeight: 700, marginBottom: "4px" }}>안내 및 고객지원</h1>
+        <p style={{ fontSize: "13px", color: "var(--text-secondary)" }}>
+          궁금하신 내용을 확인하거나 상담사에게 문의하세요.
+        </p>
       </header>
 
-      {/* Guide Links */}
-      <div className="space-y-3 mb-10">
-        {[
-          { icon: ShieldCheck, title: "FDA 90일 규정 안내", label: "Read Guide" },
-          { icon: FileText, title: "필수 동봉 서류 확인", label: "View Documents" },
-          { icon: Mail, title: "이메일 문의", label: "support@koreandoc.com" },
-        ].map((item, idx) => (
-          <div key={idx} className="glass-card p-4 flex items-center justify-between cursor-pointer active:scale-95 transition-transform">
-            <div className="flex items-center gap-4">
-              <div className="w-10 h-10 rounded-xl bg-blue-600/10 flex items-center justify-center text-blue-500">
-                <item.icon size={20} />
+      {/* ── Guide Links ── */}
+      <div style={{ display: "flex", flexDirection: "column", gap: "10px", marginBottom: "32px" }}>
+        {GUIDE_LINKS.map((item, idx) => (
+          <div key={idx} style={{
+            display: "flex", alignItems: "center", justifyContent: "space-between",
+            background: "rgba(22,22,36,0.75)", border: "1px solid rgba(255,255,255,0.07)",
+            borderRadius: "14px", padding: "14px 16px",
+            cursor: "pointer", transition: "transform 0.15s ease",
+          }}
+            onTouchStart={(e) => (e.currentTarget.style.transform = "scale(0.97)")}
+            onTouchEnd={(e) => (e.currentTarget.style.transform = "scale(1)")}
+          >
+            <div style={{ display: "flex", alignItems: "center", gap: "14px" }}>
+              <div style={{
+                width: "40px", height: "40px", borderRadius: "10px",
+                background: item.bg, display: "flex", alignItems: "center", justifyContent: "center",
+                flexShrink: 0,
+              }}>
+                <item.icon size={20} color={item.color} />
               </div>
               <div>
-                <p className="text-sm font-semibold">{item.title}</p>
-                <p className="text-[10px] text-gray-500">{item.label}</p>
+                <p style={{ fontSize: "14px", fontWeight: 600 }}>{item.title}</p>
+                <p style={{ fontSize: "11px", color: "var(--text-secondary)", marginTop: "2px" }}>{item.sub}</p>
               </div>
             </div>
-            <ChevronRight size={18} className="text-gray-600" />
+            <ChevronRight size={16} style={{ color: "var(--text-secondary)", flexShrink: 0 }} />
           </div>
         ))}
       </div>
 
-      {/* FAQ Accordion */}
-      <section className="mb-10">
-        <h2 className="text-sm font-bold text-gray-400 mb-6 uppercase tracking-widest flex items-center gap-2">
-          <HelpCircle size={14} /> Frequent Questions
-        </h2>
-        <div className="space-y-3">
+      {/* ── FAQ ── */}
+      <section style={{ marginBottom: "32px" }}>
+        <p style={{
+          fontSize: "11px", fontWeight: 700, textTransform: "uppercase",
+          letterSpacing: "0.1em", color: "var(--text-secondary)",
+          display: "flex", alignItems: "center", gap: "6px", marginBottom: "14px",
+        }}>
+          <HelpCircle size={12} /> Frequent Questions
+        </p>
+
+        <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
           {FAQ_ITEMS.map((item, i) => (
-            <div key={i} className="glass-card overflow-hidden">
+            <div key={i} style={{
+              background: "rgba(22,22,36,0.75)",
+              border: openFaq === i ? "1px solid rgba(79,142,247,0.25)" : "1px solid rgba(255,255,255,0.07)",
+              borderRadius: "14px", overflow: "hidden",
+              transition: "border-color 0.2s ease",
+            }}>
               <button
-                className="w-full p-4 text-left flex justify-between items-center bg-transparent border-none"
+                style={{
+                  width: "100%", padding: "16px", textAlign: "left",
+                  display: "flex", justifyContent: "space-between", alignItems: "center",
+                  background: "none", border: "none", cursor: "pointer",
+                  gap: "12px",
+                }}
                 onClick={() => setOpenFaq(openFaq === i ? null : i)}
               >
-                <span className="text-sm font-medium pr-4">{item.q}</span>
-                <ChevronRight 
-                  size={16} 
-                  className={`text-blue-500 transition-transform ${openFaq === i ? 'rotate-90' : ''}`} 
+                <span style={{ fontSize: "14px", fontWeight: 500, color: "var(--text-primary)", lineHeight: 1.4 }}>
+                  {item.q}
+                </span>
+                <ChevronRight
+                  size={16}
+                  style={{
+                    color: "#4f8ef7", flexShrink: 0,
+                    transform: openFaq === i ? "rotate(90deg)" : "rotate(0deg)",
+                    transition: "transform 0.2s ease",
+                  }}
                 />
               </button>
               {openFaq === i && (
-                <div className="px-4 pb-4 text-xs text-gray-400 leading-relaxed animate-fade-in-up">
-                  {item.a}
+                <div className="animate-fade-in-up" style={{ padding: "0 16px 16px" }}>
+                  <div style={{ height: "1px", background: "rgba(255,255,255,0.06)", marginBottom: "14px" }} />
+                  <p style={{ fontSize: "13px", color: "var(--text-secondary)", lineHeight: 1.7 }}>
+                    {item.a}
+                  </p>
                 </div>
               )}
             </div>
@@ -82,26 +124,45 @@ export default function HelpPage() {
         </div>
       </section>
 
-      {/* Contact CTA */}
-      <div className="glass-card p-6 bg-gradient-to-br from-blue-600/10 to-purple-600/10 border-blue-500/20 text-center">
-        <div className="w-16 h-16 bg-blue-600 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-xl shadow-blue-600/20">
-          <MessageCircle size={32} className="text-white" />
+      {/* ── Contact CTA ── */}
+      <div style={{
+        background: "rgba(22,22,36,0.75)",
+        border: "1px solid rgba(79,142,247,0.2)",
+        borderRadius: "20px", padding: "28px 20px",
+        textAlign: "center",
+        boxShadow: "inset 0 1px 0 rgba(255,255,255,0.05)",
+      }}>
+        <div style={{
+          width: "56px", height: "56px", borderRadius: "16px",
+          background: "linear-gradient(135deg, #4f8ef7, #8b5cf6)",
+          display: "flex", alignItems: "center", justifyContent: "center",
+          margin: "0 auto 16px",
+          boxShadow: "0 6px 20px rgba(79,142,247,0.35)",
+        }}>
+          <MessageCircle size={28} color="white" />
         </div>
-        <h3 className="text-lg font-bold mb-2">실시간 상담이 필요하신가요?</h3>
-        <p className="text-xs text-gray-400 mb-6 px-4">
-          카카오톡 채널을 통해 연중무휴 24시간 전문 상담원에게 직접 문의하실 수 있습니다.
+        <h3 style={{ fontSize: "17px", fontWeight: 700, marginBottom: "8px" }}>실시간 상담이 필요하신가요?</h3>
+        <p style={{ fontSize: "13px", color: "var(--text-secondary)", lineHeight: 1.65, marginBottom: "22px" }}>
+          카카오톡 채널을 통해 연중무휴 24시간<br />전문 상담원에게 직접 문의하실 수 있습니다.
         </p>
-        <a 
-          href="https://open.kakao.com" 
+        <a
+          href="https://open.kakao.com"
           target="_blank"
-          className="btn-primary w-full py-4 justify-center"
+          style={{
+            display: "inline-flex", alignItems: "center", justifyContent: "center", gap: "6px",
+            background: "linear-gradient(135deg, #4f8ef7, #8b5cf6)",
+            color: "white", textDecoration: "none",
+            borderRadius: "12px", padding: "13px 28px",
+            fontSize: "15px", fontWeight: 700,
+            boxShadow: "0 4px 16px rgba(79,142,247,0.3)",
+          }}
         >
-          카톡 상담하기 <ExternalLink size={14} className="ml-1" />
+          카톡 상담하기 <ExternalLink size={14} />
         </a>
       </div>
 
-      <p className="text-center text-[10px] text-gray-600 mt-12 pb-6">
-        © 2026 KoreanDoc Pharmacy Services. <br />
+      <p style={{ textAlign: "center", fontSize: "10px", color: "rgba(136,136,168,0.4)", marginTop: "28px", lineHeight: 1.8 }}>
+        © 2026 KoreanDoc Pharmacy Services.<br />
         Operating under FDA Personal Importation Guidelines.
       </p>
     </div>
