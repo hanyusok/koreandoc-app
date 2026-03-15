@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Search, MapPin, Clipboard, CreditCard, CheckCircle2, ArrowLeft, ArrowRight, Camera, X } from "lucide-react";
+import { Search, MapPin, Clipboard, CreditCard, CheckCircle2, ArrowLeft, ArrowRight, Camera, X, Sparkles } from "lucide-react";
 import Image from "next/image";
 
 type DrugCheckResult = {
@@ -97,9 +97,8 @@ export default function OrderPage() {
       <div className="flex justify-between items-center mb-8 px-2">
         {[1, 2, 3].map((s) => (
           <div key={s} className="flex items-center flex-1 last:flex-none">
-            <div className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold transition-all ${
-              step >= s ? "bg-blue-600 text-white shadow-lg shadow-blue-900/40" : "bg-gray-800 text-gray-600"
-            }`}>
+            <div className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold transition-all ${step >= s ? "bg-blue-600 text-white shadow-lg shadow-blue-900/40" : "bg-gray-800 text-gray-600"
+              }`}>
               {step > s ? <CheckCircle2 size={16} /> : s}
             </div>
             {s < 3 && <div className={`h-0.5 flex-1 mx-2 ${step > s ? "bg-blue-600" : "bg-gray-800"}`} />}
@@ -111,7 +110,7 @@ export default function OrderPage() {
         <div className="animate-fade-in-up">
           <h1 className="text-2xl font-bold mb-2">무슨 약인가요?</h1>
           <p className="text-gray-400 text-sm mb-8">배송 가능 성분인지 먼저 확인해 드립니다.</p>
-          
+
           <form onSubmit={handleDrugCheck} className="relative mb-8">
             <input
               className="form-input py-4 pr-12"
@@ -157,8 +156,8 @@ export default function OrderPage() {
           <div className="space-y-6">
             <div>
               <label className="text-[10px] uppercase font-bold text-gray-500 tracking-wider block mb-2">환자 성함</label>
-              <input 
-                className="form-input" 
+              <input
+                className="form-input"
                 placeholder="홍길동 / HONG GILDONG"
                 value={form.patientName}
                 onChange={(e) => setForm({ ...form, patientName: e.target.value })}
@@ -166,8 +165,8 @@ export default function OrderPage() {
             </div>
             <div>
               <label className="text-[10px] uppercase font-bold text-gray-500 tracking-wider block mb-2">미국 배송 주소 (영문)</label>
-              <textarea 
-                className="form-input min-h-[100px]" 
+              <textarea
+                className="form-input min-h-[100px]"
                 placeholder="Full address in USA"
                 value={form.usAddress}
                 onChange={(e) => setForm({ ...form, usAddress: e.target.value })}
@@ -176,18 +175,18 @@ export default function OrderPage() {
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <label className="text-[10px] uppercase font-bold text-gray-500 tracking-wider block mb-2">복용 일수</label>
-                <input 
-                  type="number" 
-                  className="form-input" 
-                  placeholder="Max 90" 
+                <input
+                  type="number"
+                  className="form-input"
+                  placeholder="Max 90"
                   value={form.pillDays}
                   onChange={(e) => setForm({ ...form, pillDays: e.target.value })}
                 />
               </div>
               <div>
                 <label className="text-[10px] uppercase font-bold text-gray-500 tracking-wider block mb-2">카톡 ID</label>
-                <input 
-                  className="form-input" 
+                <input
+                  className="form-input"
                   placeholder="선택 사항"
                   value={form.kakaoId}
                   onChange={(e) => setForm({ ...form, kakaoId: e.target.value })}
@@ -200,7 +199,7 @@ export default function OrderPage() {
               {rxPreview ? (
                 <div className="relative rounded-2xl overflow-hidden border border-white/10 aspect-video bg-gray-900">
                   <Image src={rxPreview} alt="rx" fill className="object-cover" />
-                  <button 
+                  <button
                     onClick={() => { setRxFile(null); setRxPreview(null); }}
                     className="absolute top-2 right-2 w-8 h-8 rounded-full bg-black/60 flex items-center justify-center text-white"
                   >
@@ -208,7 +207,7 @@ export default function OrderPage() {
                   </button>
                 </div>
               ) : (
-                <button 
+                <button
                   onClick={() => document.getElementById('cameraInput')?.click()}
                   className="w-full aspect-video rounded-3xl border-2 border-dashed border-gray-800 bg-gray-900/20 flex flex-col items-center justify-center gap-3 text-gray-600 hover:text-blue-500 hover:border-blue-500/50 transition-colors"
                 >
@@ -219,7 +218,7 @@ export default function OrderPage() {
               <input id="cameraInput" type="file" accept="image/*" className="hidden" onChange={handleFileChange} />
             </div>
 
-            <button 
+            <button
               className="btn-primary w-full py-4 justify-center"
               onClick={() => {
                 if (form.patientName && form.usAddress && form.pillDays && rxFile) setStep(3);
@@ -242,11 +241,10 @@ export default function OrderPage() {
           <p className="text-gray-400 text-sm mb-8">배송 및 서류 수수료 결제 방법을 골라주세요.</p>
 
           <div className="space-y-4 mb-8">
-            <button 
-              onClick={() => setForm({...form, paymentMethod: 'bank'})}
-              className={`w-full p-5 rounded-3xl border-2 text-left flex items-center justify-between ${
-                form.paymentMethod === 'bank' ? "border-blue-500 bg-blue-500/5" : "border-white/5 bg-gray-900/20"
-              }`}
+            <button
+              onClick={() => setForm({ ...form, paymentMethod: 'bank' })}
+              className={`w-full p-5 rounded-3xl border-2 text-left flex items-center justify-between ${form.paymentMethod === 'bank' ? "border-blue-500 bg-blue-500/5" : "border-white/5 bg-gray-900/20"
+                }`}
             >
               <div className="flex items-center gap-4">
                 <div className="w-12 h-12 rounded-2xl bg-gray-800 flex items-center justify-center"><CreditCard size={24} className="text-blue-400" /></div>
@@ -259,12 +257,11 @@ export default function OrderPage() {
                 {form.paymentMethod === 'bank' && <CheckCircle2 size={14} />}
               </div>
             </button>
-            
-            <button 
-              onClick={() => setForm({...form, paymentMethod: 'stripe'})}
-              className={`w-full p-5 rounded-3xl border-2 text-left flex items-center justify-between ${
-                form.paymentMethod === 'stripe' ? "border-blue-500 bg-blue-500/5" : "border-white/5 bg-gray-900/20"
-              }`}
+
+            <button
+              onClick={() => setForm({ ...form, paymentMethod: 'stripe' })}
+              className={`w-full p-5 rounded-3xl border-2 text-left flex items-center justify-between ${form.paymentMethod === 'stripe' ? "border-blue-500 bg-blue-500/5" : "border-white/5 bg-gray-900/20"
+                }`}
             >
               <div className="flex items-center gap-4">
                 <div className="w-12 h-12 rounded-xl bg-gray-800 flex items-center justify-center"><Sparkles size={24} className="text-purple-400" /></div>
@@ -288,8 +285,8 @@ export default function OrderPage() {
             </div>
           </div>
 
-          <button 
-            onClick={handleSubmit} 
+          <button
+            onClick={handleSubmit}
             disabled={submitting}
             className="btn-primary w-full py-4 justify-center shadow-2xl shadow-blue-600/30"
           >
