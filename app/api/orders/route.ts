@@ -4,6 +4,7 @@ import { generateOrderNo } from "@/lib/orderNo";
 import { checkDrugEligibility } from "@/lib/drugList";
 import { writeFile, mkdir } from "fs/promises";
 import path from "path";
+import { calculateRisk } from "@/lib/filteringEngine";
 
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
@@ -57,6 +58,9 @@ export async function POST(request: NextRequest) {
     // Generate order number
     const orderNo = await generateOrderNo();
 
+    // Calculate risk level
+    const riskLevel = await calculateRisk(drugName);
+
     const order = await prisma.uSOrder.create({
       data: {
         orderNo,
@@ -68,6 +72,7 @@ export async function POST(request: NextRequest) {
         drugName,
         drugCategory,
         paymentMethod: paymentMethod || null,
+        riskLevel,
       },
     });
 

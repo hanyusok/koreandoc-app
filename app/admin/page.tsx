@@ -18,6 +18,7 @@ type Order = {
   paymentStatus: string;
   usAddress: string;
   kakaoId: string | null;
+  riskLevel: number;
   createdAt: string;
 };
 
@@ -44,6 +45,14 @@ const STATUS_BADGE: Record<string, string> = {
   PREPARED: "badge-prepared",
   SHIPPED: "badge-shipped",
   DELIVERED: "badge-delivered",
+};
+
+const RISK_LEVEL_COLORS: Record<number, string> = {
+  1: "#22c55e", // Green
+  2: "#84cc16", // Lime
+  3: "#eab308", // Yellow
+  4: "#f97316", // Orange
+  5: "#ef4444", // Red
 };
 
 export default function AdminPage() {
@@ -202,6 +211,17 @@ export default function AdminPage() {
                 <div>
                   <p style={{ fontWeight: 600, marginBottom: 4 }}>
                     {order.orderNo}
+                    <span
+                      style={{
+                        marginLeft: 12, fontSize: 11, padding: "2px 8px",
+                        borderRadius: 4, background: `${RISK_LEVEL_COLORS[order.riskLevel]}20`,
+                        color: RISK_LEVEL_COLORS[order.riskLevel],
+                        border: `1px solid ${RISK_LEVEL_COLORS[order.riskLevel]}40`,
+                        fontWeight: 700,
+                      }}
+                    >
+                      RISK LEVEL {order.riskLevel}
+                    </span>
                     {order.pillDays > 85 && (
                       <span
                         style={{
