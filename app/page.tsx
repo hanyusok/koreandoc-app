@@ -35,10 +35,10 @@ export default function Home() {
       <header style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "24px" }}>
         <div>
           <h1 style={{ fontSize: "22px", fontWeight: 700, letterSpacing: "-0.3px", lineHeight: 1.3 }}>
-            안녕하세요 👋
+            한국의사 👋
           </h1>
           <p style={{ fontSize: "13px", color: "var(--text-secondary)", marginTop: "3px" }}>
-            미국 거주 한인 한국 약 안심 배송
+            미국 거주 한인 비대면 처방 및 안심 배송
           </p>
         </div>
         <div style={{
@@ -78,7 +78,7 @@ export default function Home() {
           오늘도 건강한 하루 보내세요
         </h2>
         <p style={{ fontSize: "13px", color: "var(--text-secondary)", lineHeight: 1.65, marginBottom: "20px" }}>
-          처방전 접수부터 통관 서류 준비까지<br />완벽하게 대행해 드립니다.
+          비대면 진료 및 처방전 검토부터 통관 서류 준비까지<br />완벽하게 원스탑으로 대행해 드립니다.
         </p>
         <Link href="/order" style={{
           display: "inline-flex", alignItems: "center", gap: "6px",
