@@ -7,6 +7,7 @@ export const authConfig: NextAuthConfig = {
   session: { strategy: "jwt" },
   pages: {
     signIn: "/admin/login",
+    verifyRequest: "/auth/verify-request",
   },
   providers: [
     GoogleProvider({
