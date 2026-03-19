@@ -18,7 +18,10 @@ type Order = {
   trackingNo: string | null;
   paymentMethod: string | null;
   paymentStatus: string;
-  prescriptionImg: string;
+  prescriptionImg: string | null;
+  isConsultation: boolean;
+  consultationTime: string | null;
+  symptomDesc: string | null;
   status: string;
   notes: string | null;
   createdAt: string;
@@ -317,8 +320,35 @@ export default function OrderDetailPage({ params }: { params: Promise<{ id: stri
           </div>
         </div>
 
-        {/* Right Column: Prescription Image */}
-        <div style={{ position: "sticky", top: 24, height: "fit-content" }}>
+        {/* Right Column: Prescription or Consultation Details */}
+        <div style={{ position: "sticky", top: 24, height: "fit-content", display: "flex", flexDirection: "column", gap: 24 }}>
+          {order.isConsultation ? (
+            <div className="glass-card" style={{ padding: 20, border: "1px solid rgba(139,92,246,0.3)", background: "rgba(139,92,246,0.05)" }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 16 }}>
+                <span style={{ fontSize: 20 }}>💬</span>
+                <h2 style={{ fontSize: 13, fontWeight: 700, color: "#c4b5fd", letterSpacing: "0.06em", margin: 0 }}>
+                  비대면 진료 신청 정보
+                </h2>
+              </div>
+              <div style={{ marginBottom: 16 }}>
+                <p style={{ fontSize: 12, color: "#a0a0b8", marginBottom: 6 }}>📍 희망 진료 시간 (미국 현지 시간)</p>
+                <div style={{ background: "rgba(0,0,0,0.2)", borderRadius: 8, padding: "12px 14px" }}>
+                  <p style={{ fontSize: 14, fontWeight: 500, color: "#f3f4f6" }}>
+                    {order.consultationTime || "미입력"}
+                  </p>
+                </div>
+              </div>
+              <div>
+                <p style={{ fontSize: 12, color: "#a0a0b8", marginBottom: 6 }}>📝 증상 및 필요 약품 상세</p>
+                <div style={{ background: "rgba(0,0,0,0.2)", borderRadius: 8, padding: "12px 14px" }}>
+                  <p style={{ fontSize: 14, color: "#f3f4f6", lineHeight: 1.6, whiteSpace: "pre-wrap" }}>
+                    {order.symptomDesc || "미입력"}
+                  </p>
+                </div>
+              </div>
+            </div>
+          ) : null}
+
           <div className="glass-card" style={{ padding: 20 }}>
             <h2 style={{ fontSize: 13, fontWeight: 700, marginBottom: 16, color: "#a0a0b8", letterSpacing: "0.06em" }}>
               📷 처방전 사진
@@ -355,6 +385,9 @@ export default function OrderDetailPage({ params }: { params: Promise<{ id: stri
               >
                 <p style={{ fontSize: 32 }}>📄</p>
                 <p style={{ marginTop: 12, fontSize: 14 }}>처방전 이미지 없음</p>
+                {order.isConsultation && (
+                  <p style={{ fontSize: 12, marginTop: 4, color: "#8b5cf6" }}>비대면 진료 신청 건입니다.</p>
+                )}
               </div>
             )}
           </div>

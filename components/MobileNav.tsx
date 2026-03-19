@@ -2,13 +2,14 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Home, ClipboardList, Search, HelpCircle } from "lucide-react";
+import { Home, ClipboardList, Search, HelpCircle, User } from "lucide-react";
 
 const TABS = [
   { href: "/", label: "홈", icon: Home },
   { href: "/order", label: "신청", icon: ClipboardList },
   { href: "/track", label: "조회", icon: Search },
   { href: "/help", label: "안내", icon: HelpCircle },
+  { href: "/profile", label: "프로필", icon: User },
 ];
 
 export default function MobileNav() {

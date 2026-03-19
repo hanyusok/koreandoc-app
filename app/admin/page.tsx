@@ -11,6 +11,7 @@ type Order = {
   drugName: string;
   drugCategory: string | null;
   pillDays: number;
+  isConsultation: boolean;
   status: string;
   isApproved: boolean;
   trackingNo: string | null;
@@ -74,34 +75,14 @@ export default function AdminPage() {
   }, [activeTab]);
 
   return (
-    <div style={{ minHeight: "100vh", background: "#0a0a0f", padding: "24px" }}>
-      {/* Header */}
-      <div
-        style={{
-          display: "flex", alignItems: "center", justifyContent: "space-between",
-          marginBottom: 32, paddingBottom: 20,
-          borderBottom: "1px solid rgba(255,255,255,0.06)",
-        }}
-      >
-        <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-          <span style={{ fontSize: 24 }}>🏥</span>
-          <div>
-            <h1 style={{ fontSize: 20, fontWeight: 700 }}>KoreanDoc 어드민</h1>
-            <p style={{ fontSize: 13, color: "#606080" }}>주문 관리 대시보드</p>
-          </div>
-        </div>
-        <div style={{ display: "flex", gap: 12, alignItems: "center" }}>
-          <Link href="/order" target="_blank" className="btn-secondary" style={{ fontSize: 13, padding: "8px 16px" }}>
-            고객 페이지 →
-          </Link>
-          <button
-            className="btn-secondary"
-            style={{ fontSize: 13, padding: "8px 16px" }}
-            onClick={() => signOut({ callbackUrl: "/admin/login" })}
-          >
-            로그아웃
-          </button>
-        </div>
+    <div style={{ padding: "0" }}>
+      <div style={{ marginBottom: 32 }}>
+        <h2 style={{ fontSize: 24, fontWeight: 700, marginBottom: 8, display: "flex", alignItems: "center", gap: 10 }}>
+          📦 주문 관리
+        </h2>
+        <p style={{ color: "#a0a0b8", fontSize: 14 }}>
+          접수된 약 배송 및 비대면 진료 신청 주문을 관리합니다.
+        </p>
       </div>
 
       {/* Stats */}
@@ -238,6 +219,11 @@ export default function AdminPage() {
                     {order.patientName} · {order.drugName}{" "}
                     {order.drugCategory && (
                       <span style={{ color: "#606080" }}>({order.drugCategory})</span>
+                    )}
+                    {order.isConsultation && (
+                      <span style={{ marginLeft: 8, color: "#c4b5fd", fontSize: 11, background: "rgba(139,92,246,0.15)", padding: "2px 6px", borderRadius: 4 }}>
+                        💬 비대면 진료 신청
+                      </span>
                     )}
                   </p>
                 </div>

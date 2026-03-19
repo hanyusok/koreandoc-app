@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Pill, ShieldCheck, Truck, ArrowRight, Search, Activity, Heart, Sparkles } from "lucide-react";
+import { Pill, ShieldCheck, Truck, ArrowRight, Search, Activity, Heart, Sparkles, Stethoscope, ClipboardList } from "lucide-react";
 
 export default function Home() {
   const [drugQuery, setDrugQuery] = useState("");
@@ -120,6 +120,45 @@ export default function Home() {
           </div>
         ))}
       </div>
+
+      {/* ── Service Flow ── */}
+      <section style={{ marginBottom: "32px" }}>
+        <p style={{ fontSize: "11px", fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--text-secondary)", display: "flex", alignItems: "center", gap: "6px", marginBottom: "16px" }}>
+          <Activity size={12} /> How It Works
+        </p>
+        <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
+          {[
+            { step: "01", title: "상담 신청", desc: "원하시는 약품이나 증상을 입력하고 진료를 신청합니다.", icon: <ClipboardList size={20} />, bg: "rgba(255,255,255,0.05)", color: "var(--text-primary)" },
+            { step: "02", title: "비대면 진료", desc: "한국 의사 선생님과 Google Meet을 통해 꼼꼼한 화상 진료를 진행합니다.", icon: <Stethoscope size={20} />, bg: "rgba(79,142,247,0.1)", color: "#4f8ef7" },
+            { step: "03", title: "비대면 복약지도", desc: "한국 약사 선생님이 안전하고 올바른 약 복용법을 상세히 안내해 드립니다.", icon: <Pill size={20} />, bg: "rgba(139,92,246,0.1)", color: "#8b5cf6" },
+            { step: "04", title: "미국 자택 배송", desc: "필요한 통관 서류를 완비하여 미국 자택까지 빠르고 안전하게 배송됩니다.", icon: <Truck size={20} />, bg: "rgba(34,197,94,0.1)", color: "#22c55e" },
+          ].map((item, idx) => (
+            <div key={idx} style={{
+              display: "flex", alignItems: "flex-start", gap: "16px",
+              padding: "16px", background: "rgba(22,22,36,0.7)", border: "1px solid rgba(255,255,255,0.05)", borderRadius: "16px",
+              position: "relative", overflow: "hidden"
+            }}>
+              <div style={{
+                position: "absolute", right: "-10px", top: "-10px",
+                fontSize: "60px", fontWeight: 800, color: "rgba(255,255,255,0.03)", pointerEvents: "none"
+              }}>
+                {item.step}
+              </div>
+              <div style={{
+                width: "42px", height: "42px", borderRadius: "12px",
+                background: item.bg, color: item.color,
+                display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0
+              }}>
+                {item.icon}
+              </div>
+              <div>
+                <p style={{ fontSize: "14px", fontWeight: 700, marginBottom: "4px" }}>{item.title}</p>
+                <p style={{ fontSize: "12px", color: "var(--text-secondary)", lineHeight: 1.5 }}>{item.desc}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
 
       {/* ── Drug Checker ── */}
       <section style={{ marginBottom: "32px" }}>

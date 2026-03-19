@@ -11,9 +11,12 @@ model USOrder {
   orderNo         String   @unique
   patientName     String
   usAddress       String
-  kakaoId         String?
-  prescriptionImg String
-  pillDays        Int
+  kakaoId          String?
+  prescriptionImg  String?
+  isConsultation   Boolean  @default(false)
+  consultationTime String?
+  symptomDesc      String?
+  pillDays         Int
   drugName        String
   drugCategory    String?
   isApproved      Boolean  @default(false)
@@ -71,7 +74,14 @@ model User {
   emailVerified DateTime?
   image         String?
   password      String?
-  role          String    @default("admin")
+  role          String    @default("user")
+  usAddress       String?
+  allergies       String?
+  currentMeds     String?
+  pastConditions  String?
+  kakaoNotif      Boolean   @default(true)
+  emailReport     Boolean   @default(false)
+  promoUpdates    Boolean   @default(true)
   accounts      Account[]
   sessions      Session[]
 }

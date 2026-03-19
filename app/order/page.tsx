@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Search, Clipboard, CreditCard, CheckCircle2, ArrowLeft, ArrowRight, Camera, X, Sparkles } from "lucide-react";
+import { Search, Clipboard, CreditCard, CheckCircle2, ArrowLeft, ArrowRight, Camera, X, Sparkles, FileText, Video } from "lucide-react";
 import Image from "next/image";
 
 type DrugCheckResult = {
@@ -65,6 +65,9 @@ export default function OrderPage() {
   });
   const [rxFile, setRxFile] = useState<File | null>(null);
   const [rxPreview, setRxPreview] = useState<string | null>(null);
+  const [hasRx, setHasRx] = useState<boolean | null>(null);
+  const [consultationTime, setConsultationTime] = useState("");
+  const [symptomDesc, setSymptomDesc] = useState("");
 
   const handleDrugCheck = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -93,7 +96,8 @@ export default function OrderPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
-    if (!rxFile) { setError("처방전 사진을 업로드해 주세요."); return; }
+    if (hasRx === true && !rxFile) { setError("처방전 사진을 업로드해 주세요."); return; }
+    if (hasRx === false && (!consultationTime || !symptomDesc)) { setError("희망 진료 시간과 증상을 입력해 주세요."); return; }
     setSubmitting(true);
     try {
       const fd = new FormData();
@@ -103,7 +107,13 @@ export default function OrderPage() {
       fd.append("pillDays", form.pillDays);
       fd.append("drugName", drugResult?.drugName ?? drugQuery);
       fd.append("paymentMethod", form.paymentMethod);
-      fd.append("prescriptionImg", rxFile);
+      if (hasRx && rxFile) {
+        fd.append("prescriptionImg", rxFile);
+      } else {
+        fd.append("isConsultation", "true");
+        fd.append("consultationTime", consultationTime);
+        fd.append("symptomDesc", symptomDesc);
+      }
       const res = await fetch("/api/orders", { method: "POST", body: fd });
       const data = await res.json();
       if (!res.ok) { setError(data.error ?? "오류가 발생했습니다."); return; }
@@ -237,36 +247,84 @@ export default function OrderPage() {
             </div>
 
             <div>
-              <label style={labelStyle}>처방전 업로드</label>
-              {rxPreview ? (
-                <div style={{ position: "relative", borderRadius: "14px", overflow: "hidden", border: "1px solid rgba(255,255,255,0.08)", aspectRatio: "16/9", background: "#111" }}>
-                  <Image src={rxPreview} alt="rx" fill style={{ objectFit: "cover" }} />
-                  <button onClick={() => { setRxFile(null); setRxPreview(null); }} style={{
-                    position: "absolute", top: "8px", right: "8px",
-                    width: "30px", height: "30px", borderRadius: "50%",
-                    background: "rgba(0,0,0,0.65)", border: "none",
-                    display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer",
-                  }}>
-                    <X size={14} color="white" />
-                  </button>
-                </div>
-              ) : (
-                <button onClick={() => document.getElementById("cameraInput")?.click()} style={{
-                  width: "100%", aspectRatio: "16/9", borderRadius: "14px",
-                  border: "2px dashed rgba(255,255,255,0.1)", background: "rgba(255,255,255,0.02)",
-                  display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
-                  gap: "10px", cursor: "pointer", color: "var(--text-secondary)",
+              <label style={labelStyle}>처방전 유무</label>
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px", marginBottom: "8px" }}>
+                <button type="button" onClick={() => setHasRx(true)} style={{
+                  padding: "14px", borderRadius: "12px", border: hasRx === true ? "2px solid #4f8ef7" : "2px solid rgba(255,255,255,0.1)",
+                  background: hasRx === true ? "rgba(79,142,247,0.1)" : "rgba(255,255,255,0.02)", color: hasRx === true ? "#4f8ef7" : "var(--text-secondary)",
+                  cursor: "pointer", display: "flex", flexDirection: "column", alignItems: "center", gap: "8px", transition: "all 0.2s"
                 }}>
-                  <Camera size={36} />
-                  <span style={{ fontSize: "13px", fontWeight: 500 }}>사진 촬영 또는 파일 선택</span>
+                  <FileText size={20} />
+                  <span style={{ fontSize: "13px", fontWeight: 600 }}>처방전이 있습니다</span>
                 </button>
-              )}
-              <input id="cameraInput" type="file" accept="image/*" style={{ display: "none" }} onChange={handleFileChange} />
+                <button type="button" onClick={() => setHasRx(false)} style={{
+                  padding: "14px", borderRadius: "12px", border: hasRx === false ? "2px solid #8b5cf6" : "2px solid rgba(255,255,255,0.1)",
+                  background: hasRx === false ? "rgba(139,92,246,0.1)" : "rgba(255,255,255,0.02)", color: hasRx === false ? "#8b5cf6" : "var(--text-secondary)",
+                  cursor: "pointer", display: "flex", flexDirection: "column", alignItems: "center", gap: "8px", transition: "all 0.2s"
+                }}>
+                  <Video size={20} />
+                  <span style={{ fontSize: "13px", fontWeight: 600 }}>비대면 진료 신청</span>
+                </button>
+              </div>
             </div>
 
+            {hasRx === true && (
+              <div className="animate-fade-in-up">
+                <label style={labelStyle}>처방전 업로드</label>
+                {rxPreview ? (
+                  <div style={{ position: "relative", borderRadius: "14px", overflow: "hidden", border: "1px solid rgba(255,255,255,0.08)", aspectRatio: "16/9", background: "#111" }}>
+                    <Image src={rxPreview} alt="rx" fill style={{ objectFit: "cover" }} />
+                    <button onClick={() => { setRxFile(null); setRxPreview(null); }} style={{
+                      position: "absolute", top: "8px", right: "8px",
+                      width: "30px", height: "30px", borderRadius: "50%",
+                      background: "rgba(0,0,0,0.65)", border: "none",
+                      display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer",
+                    }}>
+                      <X size={14} color="white" />
+                    </button>
+                  </div>
+                ) : (
+                  <button onClick={() => document.getElementById("cameraInput")?.click()} style={{
+                    width: "100%", aspectRatio: "16/9", borderRadius: "14px",
+                    border: "2px dashed rgba(255,255,255,0.1)", background: "rgba(255,255,255,0.02)",
+                    display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
+                    gap: "10px", cursor: "pointer", color: "var(--text-secondary)",
+                  }}>
+                    <Camera size={36} />
+                    <span style={{ fontSize: "13px", fontWeight: 500 }}>사진 촬영 또는 파일 선택</span>
+                  </button>
+                )}
+                <input id="cameraInput" type="file" accept="image/*" style={{ display: "none" }} onChange={handleFileChange} />
+              </div>
+            )}
+
+            {hasRx === false && (
+              <div className="animate-fade-in-up" style={{ display: "flex", flexDirection: "column", gap: "16px", padding: "16px", background: "rgba(139,92,246,0.05)", borderRadius: "14px", border: "1px solid rgba(139,92,246,0.2)" }}>
+                <div style={{ display: "flex", alignItems: "flex-start", gap: "10px" }}>
+                  <div style={{ background: "rgba(139,92,246,0.2)", borderRadius: "50%", width: "24px", height: "24px", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+                    <Video size={12} color="#8b5cf6" />
+                  </div>
+                  <p style={{ fontSize: "12px", color: "var(--text-secondary)", lineHeight: 1.5 }}>
+                    한국 의사 선생님과 Google Meet을 통해 비대면 진료를 진행합니다.<br/>증상과 희망 시간을 남겨주시면 예약 링크를 보내드립니다.
+                  </p>
+                </div>
+                <div>
+                  <label style={labelStyle}>진료 희망 시간 (미국 현지 시간 기준)</label>
+                  <input style={inputStyle} placeholder="예: 평일 오후 3시 이후 / 주말 오전" value={consultationTime} onChange={(e) => setConsultationTime(e.target.value)} />
+                </div>
+                <div>
+                  <label style={labelStyle}>현재 증상 및 필요 약품 상세</label>
+                  <textarea style={{ ...inputStyle, minHeight: "80px", resize: "none" }} placeholder="탈모약 처방이 필요합니다. 이전에는 피나스테리드 1mg 복용했습니다." value={symptomDesc} onChange={(e) => setSymptomDesc(e.target.value)} />
+                </div>
+              </div>
+            )}
+
             <button style={btnPrimary} onClick={() => {
-              if (form.patientName && form.usAddress && form.pillDays && rxFile) setStep(3);
-              else setError("필수 항목을 모두 입력해 주세요.");
+              if (form.patientName && form.usAddress && form.pillDays && hasRx !== null) {
+                if (hasRx && !rxFile) setError("처방전 사진을 업로드해 주세요.");
+                else if (!hasRx && (!consultationTime || !symptomDesc)) setError("진료 희망 시간과 증상을 모두 입력해 주세요.");
+                else setStep(3);
+              } else setError("필수 항목을 모두 입력해 주세요.");
             }}>
               마지막 단계로 <ArrowRight size={15} />
             </button>

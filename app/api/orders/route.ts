@@ -28,7 +28,10 @@ export async function POST(request: NextRequest) {
     const drugName = formData.get("drugName") as string;
     const pillDays = parseInt(formData.get("pillDays") as string, 10);
     const paymentMethod = formData.get("paymentMethod") as string;
-    const file = formData.get("prescriptionImg") as File;
+    const file = formData.get("prescriptionImg") as File | null;
+    const isConsultation = formData.get("isConsultation") === "true";
+    const consultationTime = formData.get("consultationTime") as string | null;
+    const symptomDesc = formData.get("symptomDesc") as string | null;
 
     // Validate 90-day rule
     if (pillDays > 90) {
@@ -67,7 +70,10 @@ export async function POST(request: NextRequest) {
         patientName,
         usAddress,
         kakaoId: kakaoId || null,
-        prescriptionImg: prescriptionImgPath,
+        prescriptionImg: prescriptionImgPath || null,
+        isConsultation,
+        consultationTime: consultationTime || null,
+        symptomDesc: symptomDesc || null,
         pillDays,
         drugName,
         drugCategory,
