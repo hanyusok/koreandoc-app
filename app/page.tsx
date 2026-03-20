@@ -7,11 +7,9 @@ import { Pill, ShieldCheck, Truck, ArrowRight, Search, Activity, Heart, Sparkles
 export default function Home() {
   const [drugQuery, setDrugQuery] = useState("");
   const [checkResult, setCheckResult] = useState<{
-    found: boolean;
-    eligible?: boolean;
-    drugName?: string;
-    category?: string;
-    note?: string;
+    original?: { tradeName: string; applicant: string; ingredient: string; strength: string };
+    equivalents?: any[];
+    error?: string;
   } | null>(null);
   const [checking, setChecking] = useState(false);
 
@@ -20,7 +18,7 @@ export default function Home() {
     if (!drugQuery.trim()) return;
     setChecking(true);
     try {
-      const res = await fetch(`/api/check-drug?name=${encodeURIComponent(drugQuery)}`);
+      const res = await fetch(`/api/orangebook/equivalents?tradeName=${encodeURIComponent(drugQuery)}`);
       const data = await res.json();
       setCheckResult(data);
     } finally {
@@ -198,16 +196,46 @@ export default function Home() {
           {checkResult && (
             <div className="animate-fade-in-up" style={{
               marginTop: "14px", padding: "14px", borderRadius: "12px",
-              background: checkResult.eligible ? "rgba(34,197,94,0.08)" : "rgba(244,63,94,0.08)",
-              border: `1px solid ${checkResult.eligible ? "rgba(34,197,94,0.2)" : "rgba(244,63,94,0.2)"}`,
+              background: checkResult.error ? "rgba(244,63,94,0.08)" : "rgba(34,197,94,0.08)",
+              border: `1px solid ${checkResult.error ? "rgba(244,63,94,0.2)" : "rgba(34,197,94,0.2)"}`,
             }}>
-              <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "6px" }}>
-                <span style={{ fontSize: "18px" }}>{checkResult.eligible ? "✅" : "❌"}</span>
-                <p style={{ fontSize: "13px", fontWeight: 700 }}>
-                  {checkResult.eligible ? "배송 가능 품목" : "배송 제한 품목"}
-                </p>
-              </div>
-              <p style={{ fontSize: "12px", color: "var(--text-secondary)", lineHeight: 1.6 }}>{checkResult.note}</p>
+              {checkResult.error ? (
+                <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "6px" }}>
+                  <span style={{ fontSize: "18px" }}>❌</span>
+                  <p style={{ fontSize: "13px", fontWeight: 700, color: "var(--text-primary)" }}>{checkResult.error}</p>
+                </div>
+              ) : (
+                <>
+                  <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "6px" }}>
+                    <span style={{ fontSize: "18px" }}>✅</span>
+                    <p style={{ fontSize: "13px", fontWeight: 700, color: "var(--text-primary)" }}>
+                      오리지널: {checkResult.original?.tradeName} ({checkResult.original?.applicant})
+                    </p>
+                  </div>
+                  <p style={{ fontSize: "12px", color: "var(--text-secondary)", lineHeight: 1.6, marginBottom: "8px" }}>
+                    성분: {checkResult.original?.ingredient} | 용량: {checkResult.original?.strength}
+                  </p>
+                  {checkResult.equivalents && checkResult.equivalents.length > 0 ? (
+                    <div>
+                      <p style={{ fontSize: "12px", fontWeight: 700, marginBottom: "4px", color: "var(--text-primary)" }}>
+                        제네릭 대체 약품 ({checkResult.equivalents.length}개):
+                      </p>
+                      <ul style={{ fontSize: "12px", color: "var(--text-secondary)", paddingLeft: "16px", margin: 0 }}>
+                        {checkResult.equivalents.slice(0, 5).map((eq: any, idx: number) => (
+                          <li key={idx} style={{ marginBottom: "2px" }}>
+                            {eq.applicant} ({eq.tradeName || 'Generic'})
+                          </li>
+                        ))}
+                        {checkResult.equivalents.length > 5 && (
+                          <li>...외 {checkResult.equivalents.length - 5}개 더</li>
+                        )}
+                      </ul>
+                    </div>
+                  ) : (
+                    <p style={{ fontSize: "12px", color: "var(--text-secondary)" }}>대체 가능한 제네릭 약품이 없습니다.</p>
+                  )}
+                </>
+              )}
             </div>
           )}
         </div>

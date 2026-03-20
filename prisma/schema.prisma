@@ -7,28 +7,28 @@ datasource db {
 }
 
 model USOrder {
-  id              String   @id @default(cuid())
-  orderNo         String   @unique
-  patientName     String
-  usAddress       String
+  id               String   @id @default(cuid())
+  orderNo          String   @unique
+  patientName      String
+  usAddress        String
   kakaoId          String?
   prescriptionImg  String?
   isConsultation   Boolean  @default(false)
   consultationTime String?
   symptomDesc      String?
   pillDays         Int
-  drugName        String
-  drugCategory    String?
-  isApproved      Boolean  @default(false)
-  trackingNo      String?
-  paymentMethod   String?
-  paymentStatus   String   @default("PENDING")
-  stripeSessionId String?
-  status          Status   @default(RECEIVED)
-  notes           String?
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
-  riskLevel       Int      @default(1)
+  drugName         String
+  drugCategory     String?
+  isApproved       Boolean  @default(false)
+  trackingNo       String?
+  paymentMethod    String?
+  paymentStatus    String   @default("PENDING")
+  stripeSessionId  String?
+  status           Status   @default(RECEIVED)
+  notes            String?
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+  riskLevel        Int      @default(1)
 }
 
 model ControlledSubstance {
@@ -68,22 +68,22 @@ model Session {
 }
 
 model User {
-  id            String    @id @default(cuid())
-  name          String?
-  email         String?   @unique
-  emailVerified DateTime?
-  image         String?
-  password      String?
-  role          String    @default("user")
-  usAddress       String?
-  allergies       String?
-  currentMeds     String?
-  pastConditions  String?
-  kakaoNotif      Boolean   @default(true)
-  emailReport     Boolean   @default(false)
-  promoUpdates    Boolean   @default(true)
-  accounts      Account[]
-  sessions      Session[]
+  id             String    @id @default(cuid())
+  name           String?
+  email          String?   @unique
+  emailVerified  DateTime?
+  image          String?
+  password       String?
+  role           String    @default("user")
+  usAddress      String?
+  allergies      String?
+  currentMeds    String?
+  pastConditions String?
+  kakaoNotif     Boolean   @default(true)
+  emailReport    Boolean   @default(false)
+  promoUpdates   Boolean   @default(true)
+  accounts       Account[]
+  sessions       Session[]
 }
 
 model VerificationToken {
@@ -100,4 +100,78 @@ enum Status {
   PREPARED
   SHIPPED
   DELIVERED
+}
+
+model OrangeBookProduct {
+  id                String  @id @default(cuid())
+  ingredient        String
+  dfRoute           String?
+  tradeName         String
+  applicant         String
+  strength          String
+  applType          String
+  applNo            String
+  productNo         String
+  teCode            String?
+  approvalDate      String?
+  rld               String?
+  rs                String?
+  type              String?
+  applicantFullName String?
+
+  @@index([applNo, productNo])
+  @@index([tradeName])
+  @@index([ingredient, strength])
+}
+
+model OrangeBookPatent {
+  id                String    @id @default(cuid())
+  applType          String
+  applNo            String
+  productNo         String
+  patentNo          String
+  patentExpireDate  DateTime?
+  drugSubstanceFlag String?
+  drugProductFlag   String?
+  patentUseCode     String?
+  delistFlag        String?
+  submissionDate    String?
+
+  @@index([applNo, productNo])
+}
+
+model OrangeBookExclusivity {
+  id              String    @id @default(cuid())
+  applType        String
+  applNo          String
+  productNo       String
+  exclusivityCode String
+  exclusivityDate DateTime?
+
+  @@index([applNo, productNo])
+}
+
+model KoreanBookProduct {
+  id              String  @id @default(cuid())
+  seqNo           String?
+  adminRoute      String?
+  classification  String?
+  kfdaClass       String?
+  ingredientCode  String?
+  ingredientCount String?
+  ingredientName  String?
+  productCode     String?
+  productName     String?
+  companyName     String?
+  standard        String?
+  unit            String?
+  price           String?
+  type            String?
+  note            String?
+
+  mappedIngredient String?
+  mappedStrength   String?
+
+  @@index([mappedIngredient, mappedStrength])
+  @@index([productName])
 }
