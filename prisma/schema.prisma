@@ -31,15 +31,6 @@ model USOrder {
   riskLevel        Int      @default(1)
 }
 
-model ControlledSubstance {
-  id          String   @id @default(cuid())
-  name        String   @unique
-  riskLevel   Int
-  category    String?
-  description String?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-}
 
 model Account {
   id                String  @id @default(cuid())
@@ -174,4 +165,19 @@ model KoreanBookProduct {
 
   @@index([mappedIngredient, mappedStrength])
   @@index([productName])
+}
+
+model DeaControlledSubstance {
+  id          String   @id @default(cuid())
+  cscn        String?
+  drug        String
+  drugClass   String?
+  csaSchedule String?
+  narcotic    String?
+  otherNames  String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  @@index([drug])
+  @@index([cscn])
 }
